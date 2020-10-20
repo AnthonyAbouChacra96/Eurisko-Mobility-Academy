@@ -1,11 +1,23 @@
 .App {
   text-align: center;
 }
-.red{
-	color: red;
+.red {
+  color: red;
 }
-.bold{
-	font-weight: bold;
+.bold {
+  font-weight: bold;
+}
+.Button {
+  background-color: green;
+  color: white;
+  font: inherit;
+  border: 1px solid blue;
+  padding: 8px;
+  cursor: pointer;
+}
+.Button:hover {
+  background-color: lightgreen;
+  color: black;
 }
 /* .App-logo {
   animation: App-logo-spin infinite 20s linear;
