@@ -1,6 +1,6 @@
 import  React  from 'react';
-import './Person.css'
-import "../App.css";
+import Classes from './Person.module.css'
+import "../../../Containers/App.css";
 import styled from 'styled-components'
 //import Radium from 'radium';
 
@@ -25,16 +25,16 @@ const Person =(props)=>{
 // };
 return (
   //<div className='Person' style={style}>
-		//<div className='Person'>
+		<div className={Classes.Person}>
 
-		<StyleDiv>
+		{/* // <StyleDiv> */}
     <p onClick={props.click}>
       I'm {props.name} And I'm {props.age} years Old !!
     </p>
     <p>{props.children}</p>
     <input type="text" onChange={props.changed} value={props.name} />
-		{/* </div> */}
-	</StyleDiv>
+		</div>
+	// {/* // </StyleDiv> */}
 );
 };
 

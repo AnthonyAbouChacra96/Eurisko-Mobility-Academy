@@ -1,24 +1,27 @@
 import React, { Component, useState } from "react";
 //import logo from './logo.svg';
-import "./App.css";
-import Person from "./Person/Person";
-import styled from "styled-components";
+//import "./App.css";
+import Classes from "./App.css";
+import Persons from "../Components/Persons/Persons";
+import Cockpit from "../Components/Cockpit/Cockpit";
+import axios from "axios";
+//import styled from "styled-components";
 //import Radium from 'radium';
 //import Radium, { StyleRoot } from "radium";
 
-const StyledButton = styled.button`
-	background-color: ${(props) => (props.alt ? "red" : "lightgreen")};
-	color:white;
-  font: inherit;
-  border: 1px solid blue;
-  padding: 8px;
-  cursor: pointer;
+// const StyledButton = styled.button`
+// 	background-color: ${(props) => (props.alt ? "red" : "lightgreen")};
+// 	color:white;
+//   font: inherit;
+//   border: 1px solid blue;
+//   padding: 8px;
+//   cursor: pointer;
 
-  &:hover {
-    background-color: ${(props) => (props.alt ? "salmon" : "green")};
-    color: black;
-  }
-`;
+//   &:hover {
+//     background-color: ${(props) => (props.alt ? "salmon" : "green")};
+//     color: black;
+//   }
+// `;npm start
 
 //const app = props =>{
 class App extends Component {
@@ -103,35 +106,44 @@ class App extends Component {
     this.setState({ showPersons: !doesShow });
   };
   render() {
-    const style = {
-      backgroundColor: "White",
-      font: "inherit",
-      border: "1px solid blue",
-      padding: "8px",
-      cursor: "pointer",
-      ":hover": {
-        backgroundColor: "lightgreen",
-        color: "black",
-      },
-    };
+    // const style = {
+    //   backgroundColor: "White",
+    //   font: "inherit",
+    //   border: "1px solid blue",
+    //   padding: "8px",
+    //   cursor: "pointer",
+    //   ":hover": {
+    //     backgroundColor: "lightgreen",
+    //     color: "black",
+    //   },
+    // };
     let persons = null;
     if (this.state.showPersons) {
       persons = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            return (
-              <Person
-                click={() => this.deletePersonHandler(index)}
-                name={person.name}
-                age={person.age}
-                key={person.id}
-                changed={(event) => this.NameChangedHandler(event, person.id)}
-              >
-                {" "}
-              </Person>
-            );
-          })}
-          {/* <Person
+        <Persons
+          persons={this.state.persons}
+          clicked={this.deletePersonHandler}
+          changed={this.NameChangedHandler}
+        />
+      );
+    }
+			// (
+        // <div>
+          
+          // {/* {this.state.persons.map((person, index) => {
+          //   return (
+          //     <Person
+          //       click={() => this.deletePersonHandler(index)}
+          //       name={person.name}
+          //       age={person.age}
+          //       key={person.id}
+          //       changed={(event) => this.NameChangedHandler(event, person.id)}
+          //     >
+          //       {" "}
+          //     </Person>
+          //   );
+          // })} */}
+          /* <Person
                name={this.state.persons[0].name}
                age={this.state.persons[0].age}
              />
@@ -146,31 +158,39 @@ class App extends Component {
              <Person
                name={this.state.persons[2].name}
                age={this.state.persons[2].age}
-             /> */}
-        </div>
-      );
-      style.backgroundColor = "red";
-      style.color = "white";
-    }
+             /> */
+        // </div>
+      // );
+      //style.backgroundColor = "red";
+      //style.color = "white";
+  
 
     //	let classes=['red','bold'].join(' ');
-    let classes = [];
-    if (this.state.persons.length <= 2) {
-      classes.push("red");
-    }
-    if (this.state.persons.length <= 1) {
-      classes.push("bold");
-    }
+    // let classes = [];
+    // if (this.state.persons.length <= 2) {
+    //   classes.push(Classes.red);
+    // }
+    // if (this.state.persons.length <= 1) {
+    //   classes.push(Classes.bold);
+    // }
     return (
       //<StyleRoot>
-      <div className={"App"}>
-        <h1>Hi,I'm A React App</h1>
+      <div className={Classes.App}>
+				<Cockpit 
+				showPersons={this.state.showPersons}
+				persons={this.state.persons}
+				 clicked={this.togglePersonHandler} />
+
+        {/* <h1>Hi,I'm A React App</h1>
         <p className={classes.join(" ")}>This is really working !!</p>
-        <button className='Button' onClick={() => this.togglePersonHandler()}>
-        {/* <StyledButton alt={this.state.showPersons} onClick={() => this.togglePersonHandler()}> */}
-          Toggle Persons
-        {/* </StyledButton> */}
-        </button>
+        <button
+          className={Classes.Button}
+          onClick={() => this.togglePersonHandler()}
+        > */}
+          {/* <StyledButton alt={this.state.showPersons} onClick={() => this.togglePersonHandler()}> */}
+          {/* Toggle Persons */}
+          {/* </StyledButton>
+        </button> */}
         {persons}
 
         {/* <header className="App-header">
