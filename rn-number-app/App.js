@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View,SafeAreaView } from "react-native";
 import Header from "./Components/Header";
 import StartGameScreen from "./Screens/StartGameScreen";
 import GameScreen from "./Screens/GameScreen";
@@ -8,7 +8,7 @@ import * as Font from "expo-font";
 import { AppLoading } from "expo";
 
 const fetchFonts = () => {
-  Font.loadAsync({
+ return Font.loadAsync({
     "open-sans": require("./assets/Fonts/OpenSans-Regular.ttf"),
     "open-sans-bold": require("./assets/Fonts/OpenSans-Bold.ttf"),
   });
@@ -56,10 +56,10 @@ export default function App() {
     );
   }
   return (
-    <View style={styles.screen}>
-      <Header title="Guess A Number" />
-      {content}
-    </View>
+    <SafeAreaView style={styles.screen}>
+        <Header title="Guess A Number" />
+        {content}
+    </SafeAreaView>
   );
 }
 
