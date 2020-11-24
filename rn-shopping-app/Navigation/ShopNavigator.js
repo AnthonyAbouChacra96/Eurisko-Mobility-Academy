@@ -1,18 +1,21 @@
 import React from "react";
-import { Platform } from "react-native";
-import{createSwitchNavigator} from 'react-navigation'
+import { SafeAreaView, Button, View, Platform } from "react-native";
+import { createSwitchNavigator } from "react-navigation";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
-import { createDrawerNavigator } from "react-navigation-drawer";
+import { createDrawerNavigator, DrawerItems,DrawerNavigatorItems } from "react-navigation-drawer";
 import ProductsOverviewScreen from "../Screens/Shop/ProductsOverviewScreen";
 import ProductDetailScreen from "../Screens/Shop/ProductDetailScreen";
 import CartScreen from "../Screens/Shop/CartScreen";
-import UserProductsScreen from '../Screens/User/UserProductsScreen';
+import UserProductsScreen from "../Screens/User/UserProductsScreen";
 import Colors from "../Constants/Colors";
 import OrdersScreen from "../Screens/Shop/OrdersScreen";
-import EditProductScreen from '../Screens/User/EditProductScreen';
-import {Ionicons} from "@expo/vector-icons";
-import AuthScreen from '../Screens/User/AuthScreen';
+import EditProductScreen from "../Screens/User/EditProductScreen";
+import { Ionicons } from "@expo/vector-icons";
+import AuthScreen from "../Screens/User/AuthScreen";
+import StartupScreen from "../Screens/StartupScreen";
+import {useDispatch} from 'react-redux'
+import * as authActions from '../Store/Action/Auth';
 const defaultNavOptions = {
   headerStyle: {
     backgroundColor: Platform.OS === "android" ? Colors.primary : "",
@@ -65,8 +68,8 @@ const OrdersNavigator = createStackNavigator(
 );
 const AdminNavigator = createStackNavigator(
   {
-		userProducts: UserProductsScreen,
-		editProduct:EditProductScreen,
+    userProducts: UserProductsScreen,
+    editProduct: EditProductScreen,
   },
   {
     navigationOptions: {
@@ -85,18 +88,39 @@ const AdminNavigator = createStackNavigator(
 const ShopNavigator = createDrawerNavigator(
   {
     products: ProductsNavigator,
-		orders: OrdersNavigator,
-		admin:AdminNavigator,
+    orders: OrdersNavigator,
+    admin: AdminNavigator,
   },
   {
     contentOptions: {
       activeTintColor: Colors.primary,
     },
+    contentComponent: (props) => {
+			const dispatch=useDispatch();
+      return (
+        <View style={{ flex: 1 ,padding:20}}>
+          <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+            <DrawerItems {...props}/>
+							<Button title="Logout" color={Colors.primary} onPress={()=>{dispatch(authActions.logout());
+						//	props.navigation.navigate('Auth');
+							}}/>
+          
+          </SafeAreaView>
+        </View>
+      );
+    },
   }
 );
-const AuthNavigator=createStackNavigator({
-	Auth:AuthScreen
+const AuthNavigator = createStackNavigator(
+  {
+    Auth: AuthScreen,
+  },
+  { defaultNavigationOptions: defaultNavOptions }
+);
+const MainNavigator = createSwitchNavigator({
+  Startup: StartupScreen,
+  Auth: AuthNavigator,
+  Shop: ShopNavigator,
 });
-const MainNavigator= createSwitchNavigator({Auth:AuthNavigator,shop:ShopNavigator});
 
 export default createAppContainer(MainNavigator);

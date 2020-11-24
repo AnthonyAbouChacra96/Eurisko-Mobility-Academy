@@ -4,16 +4,18 @@ import {enableScreens} from 'react-native-screens';
 import {Provider} from 'react-redux';
 import productsReducer from './Store/Reducers/Products';
 import cartReducer from './Store/Reducers/Cart';
-import ShopNavigator from './Navigation/ShopNavigator';
+import NavigationContainer from "./Navigation/NavigationContainer";
 import {AppLoading} from 'expo';
 import * as Font from 'expo-font'
 import OrderReducer from './Store/Reducers/Order';
+import authReducer from './Store/Reducers/Auth';
 import ReduxThunk from 'redux-thunk';
 enableScreens();
 const rootReducer=combineReducers({
 	products:productsReducer,
 	cart:cartReducer,
-	orders:OrderReducer
+	orders:OrderReducer,
+	auth:authReducer
 });
 const store =createStore(rootReducer,applyMiddleware(ReduxThunk));
 const fetchFonts=()=>{
@@ -28,6 +30,8 @@ export default function App() {
 return(<AppLoading startAsync={fetchFonts} onFinish={()=>{setFontLoaded(true)}}/>);
 	}
   return (
-<Provider store={store}><ShopNavigator/></Provider>
+    <Provider store={store}>
+      <NavigationContainer />
+    </Provider>
   );
 }

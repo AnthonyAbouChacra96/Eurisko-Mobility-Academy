@@ -4,10 +4,10 @@ export const ADD_ORDER = "ADD_ORDER";
 export const SET_ORDERS='SET_ORDERS';
 	
 export const fetchOrders=()=>{
-return async dispatch=>{
-	try{
+return async( dispatch,getState)=>{
+	try{		const userId = getState().auth.userId;
 	      const response = await fetch(
-          "https://rn-compete-guide.firebaseio.com/orders/u1.json"
+          `https://rn-compete-guide.firebaseio.com/orders/${userId}.json`
         );
         if (!response.ok) {
           throw new Error("Something Went  Wrong!!");
@@ -36,16 +36,22 @@ return async dispatch=>{
 };
 
 export const addOrder = (cartItems, totalAmount) => {
-  return async (dispatch) => {
-		const date= new Date();
+  return async (dispatc,getState) => {
+		const date= new Date();		
+		const token = getState().auth.token;
+		const userId = getState().auth.userId;
     const response = await fetch(
-      "https://rn-compete-guide.firebaseio.com/orders/u1.json",
+      `https://rn-compete-guide.firebaseio.com/orders/${userId}.json?auth=${token}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cartItems,totalAmount,date:date.toISOString() }),
+        body: JSON.stringify({
+          cartItems,
+          totalAmount,
+          date: date.toISOString(),
+        }),
       }
-		);
+    );
 		if(!response.ok){
 			throw new Error('Someting went wrong!')
 		}

@@ -5,8 +5,12 @@ export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 
 export const fetchProducts = () => {
-  return async (dispatch) => {
-    try {
+  return async (dispatch ,getState) => {
+				const userId = getState().auth.userId;
+		//console.log('state on fetch products:',userId,getState())
+
+    try {	
+			
       const response = await fetch(
         "https://rn-compete-guide.firebaseio.com/products.json"
       );
@@ -19,16 +23,19 @@ export const fetchProducts = () => {
         loadedProducts.push(
           new Product(
             key,
-            "u1",
+            resData[key].ownerId,
             resData[key].title,
             resData[key].imageUrl,
             resData[key].description,
             resData[key].price
           )
         );
-      }
-
-      dispatch({ type: SET_PRODUCTS, products: loadedProducts });
+			}
+			console.log(
+        "userProducts",
+        loadedProducts.filter((prod) => (prod) =>prod.ownerId && prod.ownerId === userId)
+      );
+      dispatch({ type: SET_PRODUCTS, products: loadedProducts,userProducts:loadedProducts.filter(prod=>prod.ownerId &&prod.ownerId===userId) });
     } catch (err) {
       throw err;
     }
@@ -36,9 +43,10 @@ export const fetchProducts = () => {
 };
 
 export const deleteProduct = (productId) => {
-  return async (dispatch) => {
+  return async (dispatch,getState) => {
+					const token = getState().auth.token;
       const response = await fetch(
-        `https://rn-compete-guide.firebaseio.com/products/${productId}.json`,
+        `https://rn-compete-guide.firebaseio.com/products/${productId}.json?auth=${token}`,
         {
           method: "DELETE",
         }
@@ -50,18 +58,22 @@ export const deleteProduct = (productId) => {
   };
 };
 export const createProduct = (title, description, imageUrl, price) => {
-  return async (dispatch) => {
+  return async (dispatch,getState) => {
+	console.log(getState());
+			const token = getState().auth.token;
+		
+			const userId = getState().auth.userId;
     const response = await fetch(
-      "https://rn-compete-guide.firebaseio.com/products.json",
+      `https://rn-compete-guide.firebaseio.com/products.json?auth=${token}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, description, imageUrl, price }),
+        body: JSON.stringify({ title, description, imageUrl, price,ownerId:userId }),
       }
     );
 
     const resData = await response.json();
-    console.log(resData);
+    console.log('Created Product resData:',resData);
     dispatch({
       type: CREATE_PRODUCT,
       productData: {
@@ -69,14 +81,16 @@ export const createProduct = (title, description, imageUrl, price) => {
         title,
         description,
         imageUrl,
-        price,
+				price,
+				ownerId:userId
       },
     });
   };
 };
 export const updateProduct = (id, title, description, imageUrl) => {
-  return async (dispatch) => {
-  const response=  await fetch(`https://rn-compete-guide.firebaseio.com/products/${id}.json`, {
+  return async (dispatch,getState) => {
+		const token=getState().auth.token;
+  const response=  await fetch(`https://rn-compete-guide.firebaseio.com/products/${id}.json?auth=${token}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title, description, imageUrl }),

@@ -30,7 +30,8 @@ const ProductsOverviewScreen = (props) => {
         try {
           await dispatch(productsActions.fetchProducts());
         } catch (err) {
-          setError(err.message);
+					setError(err.message);
+					console.log('error fetching Products:',err.message);
 				}
 				setIsRefreshing(false);
       },[dispatch,setIsLOading,setError]);
